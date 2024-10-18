@@ -20,7 +20,7 @@ func handleText(w http.ResponseWriter, r *http.Request) {
 
 	text := r.FormValue("inputText")
 	highlightedText := highlightText(text)
-	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+	w.Header().Set("Content-Type", "text/html")
 	fmt.Fprintf(w, "%s", highlightedText)
 }
 
@@ -49,7 +49,7 @@ func toggleSpaceHandler(w http.ResponseWriter, r *http.Request) {
             > </span>`, currentClass, currentClass)
 	}
 
-	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+	w.Header().Set("Content-Type", "text/html")
 	fmt.Fprintf(w, "%s", newSpace)
 }
 
@@ -65,7 +65,10 @@ func highlightText(text string) string {
     for i := 0; i < len(runes); i++ {
         r := runes[i]
 
-        isNbsp := (i + 5 <= len(runes) && nbspRegex.MatchString(string(runes[i:i + 6])))
+        isNbsp := false
+        if i + 5 < len(runes) {
+            isNbsp = nbspRegex.MatchString(string(runes[i:i + 6]))
+        }
         if r == ' ' || isNbsp {
             highlightedText.WriteString(string(runes[lastPos:i]))
             if r != ' ' {
@@ -73,7 +76,7 @@ func highlightText(text string) string {
             }
 
             var before, after rune
-            if i > 0 {
+            if i > 0  {
                 before = runes[i - 1]
             }
             if i + 1 < len(runes) {
