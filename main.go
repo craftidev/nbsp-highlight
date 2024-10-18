@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"regexp"
 	"strings"
 )
@@ -125,7 +126,10 @@ func main() {
 	http.HandleFunc("/process", handleText)
 	http.HandleFunc("/toggle", toggleSpaceHandler)
 
-	port := ":8080"
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 	fmt.Printf("Server started at http://localhost%s\n", port)
 	http.ListenAndServe(port, nil)
 }
