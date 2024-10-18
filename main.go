@@ -1,32 +1,128 @@
 package main
 
 import (
-    "fmt"
-    "log"
-    "net/http"
+	"fmt"
+	"net/http"
+	"regexp"
+	"strings"
 )
 
-// Serve static HTML for frontend
 func serveFrontend(w http.ResponseWriter, r *http.Request) {
-    http.ServeFile(w, r, "index.html")
+	http.ServeFile(w, r, "index.html")
 }
 
-// Handle textarea input submission
 func handleText(w http.ResponseWriter, r *http.Request) {
-    if r.Method == http.MethodPost {
-        text := r.FormValue("inputText")
-        // Process the text here (for example, highlight non-breaking spaces)
-        fmt.Fprintf(w, "Processed text: %s", text)
-    } else {
-        http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Unable to parse form", http.StatusBadRequest)
+		return
+	}
+
+	text := r.FormValue("inputText")
+	highlightedText := highlightText(text)
+	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+	fmt.Fprintf(w, "%s", highlightedText)
+}
+
+func toggleSpaceHandler(w http.ResponseWriter, r *http.Request) {
+	text := r.FormValue("text")
+	currentClass := r.FormValue("class")
+
+	var newSpace string
+	if text == " " {
+		newSpace = fmt.Sprintf(
+            `<span
+                hx-post="/toggle"
+                hx-target="this"
+                hx-swap="outerHTML"
+                hx-vals='{"text":"&amp;nbsp;", "class":"%s"}'
+                class="highlight %s"
+            >&amp;nbsp;</span>`, currentClass, currentClass)
+	} else {
+		newSpace = fmt.Sprintf(
+            `<span
+                hx-post="/toggle"
+                hx-target="this"
+                hx-swap="outerHTML"
+                hx-vals='{"text":" ", "class":"%s"}'
+                class="highlight %s"
+            > </span>`, currentClass, currentClass)
+	}
+
+	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+	fmt.Fprintf(w, "%s", newSpace)
+}
+
+
+func highlightText(text string) string {
+    nbspRegex := regexp.MustCompile(`&nbsp;`)
+    greenBefore := regexp.MustCompile(`[«\d]`)
+    greenAfter := regexp.MustCompile(`[»—–!?%°:\d]`)
+    var highlightedText strings.Builder
+
+    runes := []rune(text)
+    lastPos := 0
+    for i := 0; i < len(runes); i++ {
+        r := runes[i]
+
+        isNbsp := (i + 5 <= len(runes) && nbspRegex.MatchString(string(runes[i:i + 6])))
+        if r == ' ' || isNbsp {
+            highlightedText.WriteString(string(runes[lastPos:i]))
+            if r != ' ' {
+                i += 5
+            }
+
+            var before, after rune
+            if i > 0 {
+                before = runes[i - 1]
+            }
+            if i + 1 < len(runes) {
+                after = runes[i + 1]
+            }
+
+            if greenBefore.MatchString(string(before)) || greenAfter.MatchString(string(after)) {
+                highlightedText.WriteString(
+                    `<span
+                        hx-post="/toggle"
+                        hx-target="this"
+                        hx-swap="outerHTML"
+                        hx-vals='{"text":"&amp;nbsp;", "class":"highlight green"}'
+                        class="highlight green"
+                    >&amp;nbsp;</span>`)
+            } else {
+                if isNbsp {
+                    highlightedText.WriteString(
+                        `<span
+                            hx-post="/toggle"
+                            hx-target="this"
+                            hx-swap="outerHTML"
+                            hx-vals='{"text":"&amp;nbsp;", "class":"highlight grey"}'
+                            class="highlight grey"
+                        >&amp;nbsp;</span>`)
+                } else {
+                    highlightedText.WriteString(
+                        `<span
+                            hx-post="/toggle"
+                            hx-target="this"
+                            hx-swap="outerHTML"
+                            hx-vals='{"text":" ", "class":"highlight grey"}'
+                            class="highlight grey"
+                        > </span>`)
+                }
+            }
+            lastPos = i + 1
+        }
     }
+    highlightedText.WriteString(string(runes[lastPos:]))
+    return highlightedText.String()
 }
 
 func main() {
-    http.HandleFunc("/", serveFrontend)
-    http.HandleFunc("/process", handleText)
+	http.HandleFunc("/", serveFrontend)
+	http.HandleFunc("/process", handleText)
+	http.HandleFunc("/toggle", toggleSpaceHandler)
 
-    port := ":8080"
-    log.Printf("Starting server on %s...", port)
-    log.Fatal(http.ListenAndServe(port, nil))
+	port := ":8080"
+	fmt.Printf("Server started at http://localhost%s\n", port)
+	http.ListenAndServe(port, nil)
 }

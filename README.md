@@ -1,2 +1,14 @@
-# nbsp-highlight
-Check input text, highlight necessary nbsp
+# French rules
+## After
+«
+
+## Before
+- »
+- — (cadratin)
+- – (semi-cadratin)
+- !
+- ?
+- :
+
+## Manual
+Number After/Before

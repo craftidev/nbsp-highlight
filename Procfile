@@ -1,1 +1,1 @@
-web: nbsp-highlight
+web: ./main

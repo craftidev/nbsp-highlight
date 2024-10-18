@@ -3,17 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Processor</title>
+    <title>NBSP Highlight</title>
     <style>
-        textarea { width: 100%; height: 200px; }
-        button { padding: 10px; margin-top: 10px; }
+        textarea { width: 60rem; height: 10rem; max-width: 100%; max-height: 50%; }
+        .highlight { color: white; cursor: pointer; }
+        .highlight.green { background-color: green; }
+        .highlight.grey { background-color: grey; }
+        .output { width: 60rem; max-width: 100%; }
     </style>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
 </head>
 <body>
-    <h1>Enter your text:</h1>
-    <form action="/process" method="POST">
+    <h1>Format spaces in your text</h1>
+
+    <form hx-post="/process" hx-target="#output" hx-swap="innerHTML">
         <textarea name="inputText" placeholder="Enter your text here..."></textarea><br>
         <button type="submit">Process Text</button>
     </form>
+
+    <h2>Result:</h2>
+    <div id="output" class="output"></div>
+    <hr>
+    <p><strong>Click</strong> to switch between normal space and nbsp.</p>
+    <p><strong>Grey</strong>: Out of French rules scope.</p>
+    <p><strong>Green</strong>: In French rules scope. Autoconvert in nbsp</p>
+    <p>Want to <strong>test</strong>, use this: « Here is an example » — which involves a number like 3 000, special punctuation !, and the use of % correctly. Also, check this custom use of &ampnbsp;: I&ampnbsp;will&ampnbsp;use&ampnbsp;it&ampnbsp;here. And finally, let's see how this works with digits : from 2 to 4 or 5&ampnbsp;000&ampnbsp;units. Isn't it awesome ? And don't forget those weirdos too : – is 21 °C hot too.</p>
 </body>
 </html>
