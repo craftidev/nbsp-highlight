@@ -7,6 +7,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+    "html"
 )
 
 func serveFrontend(w http.ResponseWriter, r *http.Request) {
