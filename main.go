@@ -20,9 +20,9 @@ func handleText(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	text := r.FormValue("inputText")
+	text := html.EscapeString(r.FormValue("inputText"))
 	highlightedText := highlightText(text)
-	w.Header().Set("Content-Type", "text/html")
+	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
 	fmt.Fprintf(w, "%s", highlightedText)
 }
 
@@ -51,7 +51,7 @@ func toggleSpaceHandler(w http.ResponseWriter, r *http.Request) {
             > </span>`, currentClass, currentClass)
 	}
 
-	w.Header().Set("Content-Type", "text/html")
+	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
 	fmt.Fprintf(w, "%s", newSpace)
 }
 
