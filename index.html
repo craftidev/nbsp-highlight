@@ -7,14 +7,18 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+    <!-- Language Switch Flags -->
+    <div style="position: absolute; top: 10px; right: 10px;">
+        <form action="/switch-language" method="POST" style="margin-bottom: 1rem;">
+            <input type="hidden" name="lang" value="{{if eq .Title "NBSP Formatter"}}fr{{else}}en{{end}}">
+            <button type="submit">{{.ToggleButton}}</button>
+        </form>
+    </div>
+
     <h1>{{.Title}}</h1>
     <p>{{.Description}}</p>
 
     <!-- Language Switch Button -->
-    <form action="/switch-language" method="POST" style="margin-bottom: 1rem;">
-        <input type="hidden" name="lang" value="{{if eq .Title "NBSP Formatter"}}fr{{else}}en{{end}}">
-        <button type="submit">{{.ToggleButton}}</button>
-    </form>
 
     <!-- Text Processing Form -->
     <form hx-post="/process" hx-target="#output" hx-swap="innerHTML">
