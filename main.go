@@ -31,7 +31,8 @@ func handleText(w http.ResponseWriter, r *http.Request) {
 	}
 
 	text := html.EscapeString(r.FormValue("inputText"))
-	highlightedText := highlightText(text)
+    ignoreHTML := r.FormValue("ignoreHTML") == "on"
+	highlightedText := highlightText(text, ignoreHTML)
 	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
 	fmt.Fprintf(w, "%s", highlightedText)
 }
@@ -66,17 +67,36 @@ func toggleSpaceHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 
-func highlightText(text string) string {
+func highlightText(text string, ignoreHTML bool) string {
     nbspRegex := regexp.MustCompile(`&nbsp;`)
     ampNbspRegex := regexp.MustCompile(`&amp;nbsp;`)
+    openHTMLRegex := regexp.MustCompile(`&lt;`)
+    closeHTMLRegex := regexp.MustCompile(`&gt;`)
     greenBefore := regexp.MustCompile(`[«\d]`)
     greenAfter := regexp.MustCompile(`[»—–!?%°:\d]`)
     var highlightedText strings.Builder
 
     runes := []rune(text)
     lastPos := 0
+    inHTMLTag := false
     for i := 0; i < len(runes); i++ {
         r := runes[i]
+
+        if ignoreHTML {
+            if i + 3 < len(runes) {
+                if openHTMLRegex.MatchString(string(runes[i:i + 4])) {
+                    inHTMLTag = true
+                } else if closeHTMLRegex.MatchString(string(runes[i:i + 4])) {
+                    inHTMLTag = false
+                    highlightedText.WriteString(string(runes[lastPos : i+1]))
+                    lastPos = i + 1
+                    continue
+                }
+                if inHTMLTag {
+                    continue
+                }
+            }
+        }
 
         isNbsp := false
         isAmpNbsp := false
