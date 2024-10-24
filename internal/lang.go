@@ -2,6 +2,7 @@ package internal
 
 import (
 	"net/http"
+	"strings"
 )
 
 var CurrentLang string = "en"
@@ -18,6 +19,22 @@ type PageData struct {
 	ToggleButton    string
 	Instructions    string
     Footer          string
+}
+
+func DetectUserLanguage(r *http.Request) string {
+	langHeader := r.Header.Get("Accept-Language")
+	if langHeader == "" {
+		return "en"
+	}
+
+	langs := strings.Split(langHeader, ",")
+	if len(langs) > 0 {
+		langCode := strings.SplitN(langs[0], "-", 2)[0]
+		if langCode == "fr" {
+			return "fr"
+		}
+	}
+	return "en"
 }
 
 func GetTranslations(lang string) PageData {

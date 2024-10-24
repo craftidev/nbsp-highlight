@@ -14,6 +14,7 @@ import (
 )
 
 func serveFrontend(w http.ResponseWriter, r *http.Request) {
+    internal.CurrentLang = internal.DetectUserLanguage(r)
 	tmpl := template.Must(template.ParseFiles("index.html"))
 
 	translations := internal.GetTranslations(internal.CurrentLang)
