@@ -18,3 +18,9 @@ But if they are in the scope of the `french rules` below, they are automatically
 - ?
 - :
 - Digit (maybe superfluous)
+
+# Last update
+- New design
+- Correct bug when entering real unbreakable space, it wasn't interpreted
+- Lang switch en/fr
+- Can ignore HTML code
