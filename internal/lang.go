@@ -17,6 +17,7 @@ type PageData struct {
     CopySuccessText string
 	ResultHeading   string
 	ToggleButton    string
+    IgnoreHTML      string
 	Instructions    string
     Footer          string
 }
@@ -48,6 +49,7 @@ func GetTranslations(lang string) PageData {
             CopySuccessText: "✔ Copié",
 			ResultHeading: "Texte traité :",
 			ToggleButton:  "🇬🇧",
+            IgnoreHTML:    "Ignorer le HTML entre < et >",
 			Instructions:  `
                 <p><strong>Cliquez</strong> sur les espaces en surbrillance pour basculer entre l'espace normal et l'espace insécable (nbsp).</p>
                 <p>Les espaces <strong class="highlight grey">Gris</strong> sont en dehors des règles typographiques françaises concernant les nbsp. Les <strong class="highlight green">Les espaces Verts</strong> sont concernés par ces règles et seront automatiquement convertis en nbsp.</p>
@@ -65,6 +67,7 @@ func GetTranslations(lang string) PageData {
         CopySuccessText: "✔ Copied",
 		ResultHeading: "Processed Text:",
 		ToggleButton:  "🇫🇷",
+        IgnoreHTML:    "Ignore HTML between < and >",
 		Instructions:  `
             <p><strong>Click</strong> on highlighted spaces to toggle between normal space and non-breaking space (nbsp).</p>
             <p><strong class="highlight grey">Grey</strong> spaces are outside the French typographic rules about nbsp. <strong class="highlight green">Green</strong> spaces are concerned by the rules and will be auto-converted to nbsp.</p>
