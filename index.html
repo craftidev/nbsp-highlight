@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <!-- Language Switch Flags -->
+    <!-- Language Switch Flags Button -->
     <div style="position: absolute; top: 10px; right: 10px;">
         <form action="/switch-language" method="POST" style="margin-bottom: 1rem;">
             <input type="hidden" name="lang" value="{{if eq .Title "NBSP Formatter"}}fr{{else}}en{{end}}">
@@ -17,8 +17,6 @@
 
     <h1>{{.Title}}</h1>
     <p>{{.Description}}</p>
-
-    <!-- Language Switch Button -->
 
     <!-- Text Processing Form -->
     <form hx-post="/process" hx-target="#output" hx-swap="innerHTML">
@@ -41,6 +39,10 @@
 
     <hr>
     <section>{{.Instructions}}</section>
+
+    <div class="centering-container">
+        <section class="updates">{{.Updates}}</section>
+    </div>
 
     <footer>{{.Footer}}</footer>
 
