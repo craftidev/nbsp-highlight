@@ -59,6 +59,7 @@ func toggleSpaceHandler(w http.ResponseWriter, r *http.Request) {
 
 func highlightText(text string) string {
     nbspRegex := regexp.MustCompile(`&nbsp;`)
+    ampNbspRegex := regexp.MustCompile(`&amp;nbsp;`)
     greenBefore := regexp.MustCompile(`[«\d]`)
     greenAfter := regexp.MustCompile(`[»—–!?%°:\d]`)
     var highlightedText strings.Builder
@@ -69,13 +70,20 @@ func highlightText(text string) string {
         r := runes[i]
 
         isNbsp := false
+        isAmpNbsp := false
         if i + 5 < len(runes) {
             isNbsp = nbspRegex.MatchString(string(runes[i:i + 6]))
         }
-        if r == ' ' || isNbsp {
+        if i + 9 < len(runes) {
+            isAmpNbsp = ampNbspRegex.MatchString(string(runes[i:i + 10]))
+        }
+        if r == ' ' || r == '\u00A0' || isNbsp || isAmpNbsp {
             highlightedText.WriteString(string(runes[lastPos:i]))
-            if r != ' ' {
+            if isNbsp {
                 i += 5
+            }
+            if isAmpNbsp {
+                i += 9
             }
 
             var before, after rune
@@ -127,6 +135,9 @@ func main() {
 	http.HandleFunc("/", serveFrontend)
 	http.HandleFunc("/process", handleText)
 	http.HandleFunc("/toggle", toggleSpaceHandler)
+
+    fs := http.FileServer(http.Dir("./static"))
+    http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	port := os.Getenv("PORT")
 	if port == "" {
