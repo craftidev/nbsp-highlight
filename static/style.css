@@ -31,9 +31,9 @@ textarea {
 }
 
 button {
-    background-color: #467ebe;
+    background-color: #252a33;
     color: white;
-    border: none;
+    border: 1px solid #467ebe;
     padding: 0.8rem 1.2rem;
     border-radius: 8px;
     font-size: 1rem;
