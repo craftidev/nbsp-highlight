@@ -2,16 +2,22 @@ package main
 
 import (
 	"fmt"
+	"html"
 	"log"
 	"net/http"
 	"os"
 	"regexp"
 	"strings"
-    "html"
+	"text/template"
+
+	"github.com/craftidev/nbsphighlight/internal"
 )
 
 func serveFrontend(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "index.html")
+	tmpl := template.Must(template.ParseFiles("index.html"))
+
+	translations := internal.GetTranslations(internal.CurrentLang)
+	tmpl.Execute(w, translations)
 }
 
 func handleText(w http.ResponseWriter, r *http.Request) {
@@ -135,6 +141,7 @@ func main() {
 	http.HandleFunc("/", serveFrontend)
 	http.HandleFunc("/process", handleText)
 	http.HandleFunc("/toggle", toggleSpaceHandler)
+	http.HandleFunc("/switch-language", internal.SwitchLanguageHandler)
 
     fs := http.FileServer(http.Dir("./static"))
     http.Handle("/static/", http.StripPrefix("/static/", fs))
