@@ -1,0 +1,91 @@
+body {
+    background-color: #2d2d2d;
+    color: #f0f0f0;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 2rem;
+}
+
+h1, h2, p {
+    color: #f0f0f0;
+}
+
+p {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Form Styles */
+textarea {
+    width: 100%;
+    height: 10rem;
+    max-width: 100%;
+    border-radius: 8px;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 1rem;
+    font-size: 1rem;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #467ebe;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+}
+
+button:hover {
+    background-color: #4682b4;
+}
+
+button:disabled {
+    background-color: #777;
+    cursor: not-allowed;
+}
+
+/* Highlight Styles */
+.highlight {
+    color: white;
+    cursor: pointer;
+    padding: 0 0.2rem;
+    border-radius: 4px;
+}
+
+.highlight.green {
+    background-color: #28a745;
+}
+
+.highlight.grey {
+    background-color: #6c757d;
+}
+
+.output {
+    background-color: #333;
+    padding: 1rem;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    border: 1px solid #555;
+    margin-top: 1rem;
+    font-size: 1rem;
+}
+
+/* Footer Styles */
+hr {
+    border: 0;
+    border-top: 1px solid #555;
+    margin: 2rem 0;
+}
+
+footer {
+    text-align: center;
+    color: #888;
+    font-size: 0.9rem;
+}
