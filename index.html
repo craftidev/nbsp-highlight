@@ -3,47 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NBSP Highlight</title>
+    <title>{{.Title}}</title>
     <link rel="stylesheet" href="/static/style.css">
-    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
-    <script>
-        function copyToClipboard() {
-            const outputText = document.getElementById('output').innerText;
-            const copyButton = document.getElementById('copyButton');
-            navigator.clipboard.writeText(outputText).then(() => {
-                copyButton.innerHTML = '✔ Copied';
-                copyButton.disabled = true;
-
-                setTimeout(() => {
-                    copyButton.innerHTML = 'Copy Text to Clipboard';
-                    copyButton.disabled = false;
-                }, 2000);
-            }).catch(err => {
-                alert('Failed to copy text: ' + err);
-            });
-        }
-    </script>
 </head>
 <body>
-    <h1>NBSP Formatteur</h1>
-    <p>Ensure that your text follows the French typographic rules.</p>
+    <h1>{{.Title}}</h1>
+    <p>{{.Description}}</p>
 
-    <form hx-post="/process" hx-target="#output" hx-swap="innerHTML">
-        <textarea name="inputText" placeholder="Enter your text here..."></textarea><br>
-        <button type="submit">Process Text</button>
+    <!-- Language Switch Button -->
+    <form action="/switch-language" method="POST" style="margin-bottom: 1rem;">
+        <input type="hidden" name="lang" value="{{if eq .Title "NBSP Formatter"}}fr{{else}}en{{end}}">
+        <button type="submit">{{.ToggleButton}}</button>
     </form>
 
-    <h2>Processed Text:</h2>
+    <!-- Text Processing Form -->
+    <form hx-post="/process" hx-target="#output" hx-swap="innerHTML">
+        <textarea name="inputText" placeholder="{{.Placeholder}}"></textarea><br>
+        <button type="submit">{{.ProcessButton}}</button>
+    </form>
+
+    <h2>{{.ResultHeading}}</h2>
     <div id="output" class="output"></div>
 
-    <button id="copyButton" onclick="copyToClipboard()">Copy Text to Clipboard</button>
+    <button
+        id="copyButton"
+        onclick="copyToClipboard()"
+        data-copy-success="{{.CopySuccessText}}"
+        data-copy-default="{{.CopyButton}}"
+    >{{.CopyButton}}</button>
 
     <hr>
-    <p><strong>Click</strong> on highlighted spaces to toggle between normal space and non-breaking space (nbsp).</p>
-    <p><strong class="highlight grey">Grey</strong> spaces are outside the French typographic rules. <strong class="highlight green">Green</strong> spaces follow the rules and will be auto-converted to nbsp.</p>
+    <section>{{.Instructions}}</section>
 
-    <footer>
-        Created for internal use — © 2024
-    </footer>
+    <footer>{{.Footer}}</footer>
+
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <script src="/static/script.js"></script>
 </body>
 </html>
