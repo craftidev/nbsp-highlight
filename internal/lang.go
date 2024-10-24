@@ -9,6 +9,7 @@ var CurrentLang string = ""
 
 // Data structure to store translations
 type PageData struct {
+    Updates         string
 	Title           string
 	Description     string
 	Placeholder     string
@@ -41,6 +42,15 @@ func DetectUserLanguage(r *http.Request) string {
 func GetTranslations(lang string) PageData {
 	if lang == "fr" {
 		return PageData{
+            Updates:        `
+                Mise a jour du 24/10/24 :<br>
+                <ul>
+                    <li>Correction du bug de non interprétation d'espace insécable entrés avec Alt+255</li>
+                    <li>Possibilité d'ignorer les balises HTML</li>
+                    <li>En français</li>
+                    <li>Nouveau design</li>
+                </ul>
+            `,
 			Title:         "NBSP Formateur",
 			Description:   "Assurez-vous que votre texte suit les règles typographiques françaises.",
 			Placeholder:   "Entrez votre texte ici...",
@@ -54,11 +64,20 @@ func GetTranslations(lang string) PageData {
                 <p><strong>Cliquez</strong> sur les espaces en surbrillance pour basculer entre l'espace normal et l'espace insécable (nbsp).</p>
                 <p>Les espaces <strong class="highlight grey">Gris</strong> sont en dehors des règles typographiques françaises concernant les nbsp. Les <strong class="highlight green">Les espaces Verts</strong> sont concernés par ces règles et seront automatiquement convertis en nbsp.</p>
             `,
-            Footer: "Créé pour un usage interne — <a href='github.com/craftidev/nbsp-highlight'>craftidev</a> © 2024",
+            Footer: "Créé pour un usage interne — <a href='https://github.com/craftidev/nbsp-highlight'>craftidev</a> © 2024",
 		}
 	}
 
 	return PageData{
+        Updates:        `
+            24/10/24 Update :<br>
+            <ul>
+                <li>Fixed bug where non-breaking spaces entered with Alt+255 were not interpreted</li>
+                <li>Ability to ignore HTML tags</li>
+                <li>In French</li>
+                <li>New design</li>
+            </ul>
+        `,
 		Title:         "NBSP Formatter",
 		Description:   "Ensure that your text follows the French typographic rules.",
 		Placeholder:   "Enter your text here...",
@@ -72,7 +91,7 @@ func GetTranslations(lang string) PageData {
             <p><strong>Click</strong> on highlighted spaces to toggle between normal space and non-breaking space (nbsp).</p>
             <p><strong class="highlight grey">Grey</strong> spaces are outside the French typographic rules about nbsp. <strong class="highlight green">Green</strong> spaces are concerned by the rules and will be auto-converted to nbsp.</p>
         `,
-        Footer: "Created for internal use — <a href='github.com/craftidev/nbsp-highlight'>craftidev</a> © 2024",
+        Footer: "Created for internal use — <a href='https://github.com/craftidev/nbsp-highlight'>craftidev</a> © 2024",
 	}
 }
 
