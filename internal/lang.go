@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-var CurrentLang string = "en"
+var CurrentLang string = ""
 
 // Data structure to store translations
 type PageData struct {
@@ -47,7 +47,7 @@ func GetTranslations(lang string) PageData {
 			CopyButton:    "Copier le texte",
             CopySuccessText: "✔ Copié",
 			ResultHeading: "Texte traité :",
-			ToggleButton:  "Switch to English",
+			ToggleButton:  "🇬🇧",
 			Instructions:  `
                 <p><strong>Cliquez</strong> sur les espaces en surbrillance pour basculer entre l'espace normal et l'espace insécable (nbsp).</p>
                 <p>Les espaces <strong class="highlight grey">Gris</strong> sont en dehors des règles typographiques françaises concernant les nbsp. Les <strong class="highlight green">Les espaces Verts</strong> sont concernés par ces règles et seront automatiquement convertis en nbsp.</p>
@@ -64,7 +64,7 @@ func GetTranslations(lang string) PageData {
 		CopyButton:    "Copy Text to Clipboard",
         CopySuccessText: "✔ Copied",
 		ResultHeading: "Processed Text:",
-		ToggleButton:  "Passer en Français",
+		ToggleButton:  "🇫🇷",
 		Instructions:  `
             <p><strong>Click</strong> on highlighted spaces to toggle between normal space and non-breaking space (nbsp).</p>
             <p><strong class="highlight grey">Grey</strong> spaces are outside the French typographic rules about nbsp. <strong class="highlight green">Green</strong> spaces are concerned by the rules and will be auto-converted to nbsp.</p>
